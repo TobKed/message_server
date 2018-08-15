@@ -1,6 +1,7 @@
 import psycopg2
 import os
 
+
 DB_NAME = "msgs_server"
 DB_URI = os.environ.get('SERVER_DB_URI')  # postgresql://postgres@localhost
 DB_COMPLETE_URI = "/".join([DB_URI, DB_NAME])
@@ -36,8 +37,8 @@ def create_users_table(db_complete_uri=DB_COMPLETE_URI):
 
 
 if __name__ == '__main__':
-    # create_db()
-    # create_users_table()
-
     # nuke_db()
+    create_db()
+    create_users_table()
+
     pass
