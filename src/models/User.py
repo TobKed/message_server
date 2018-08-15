@@ -23,12 +23,15 @@ class User:
         return self.__hashed_password
 
     @hashed_password.setter
-    def set_password(self, password):
+    def hashed_password(self, password):
         self.__hashed_password = User.password_hash(password)
 
     @staticmethod
     def password_hash(password):
         return bcrypt.hashpw(bytes(password, 'utf-8'), bcrypt.gensalt())
+
+    def verify_password(self, password):
+        return self.check_password(password, self.hashed_password)
 
     @staticmethod
     def check_password(password, hashed):
@@ -36,8 +39,7 @@ class User:
 
 
 if __name__ == '__main__':
-    hashed = User.password_hash('test_pass123')
-    print(hashed)
-    print(User.check_password('test_pass123', hashed))
-    print(User.check_password('test_pass1231', hashed))
-    print(User.check_password('test_pass123', hashed))
+    x = User()
+    x.hashed_password = "pass1"
+    print(x.verify_password("pass2"))
+    print(x.verify_password("pass1"))
