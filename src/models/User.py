@@ -55,3 +55,4 @@ if __name__ == '__main__':
     x.set_new_password("password1", "password2", "password2")
     print(x.check_user_password("password2"))
     print(x.check_user_password("password1"))
+    print(x.hashed_password)

@@ -20,12 +20,12 @@ def nuke_db(db_name, db_uri):
 
 def create_users_table(db_name, db_uri):
     with psycopg2.connect(db_uri) as db_con:
-        # db_con.autocommit = True
         sql = """CREATE TABLE Users(
             id SERIAL,
             email VARCHAR(255) NOT NULL UNIQUE,
             username VARCHAR(255) NOT NULL UNIQUE,
-            hashed_password VARCHAR(80) NOT NULL
+            hashed_password VARCHAR(80) NOT NULL,
+            PRIMARY	KEY(id)
         )"""
         with db_con.cursor() as curs:
             curs.execute(sql)
@@ -39,4 +39,3 @@ if __name__ == '__main__':
     create_users_table(db_name=db_name, db_uri="/".join([DB_URI, db_name]))
 
     # nuke_db(db_name=db_name, db_uri=DB_URI)
-
