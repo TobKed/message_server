@@ -16,6 +16,9 @@ class User:
         self.email = ""
         self.__hashed_password = ""
 
+    def __repr__(self):
+        return f"User() # id={self.id}, username='{self.username}'. email='{self.email}'"
+
     @property
     def id(self):
         return self.__id
@@ -56,9 +59,33 @@ class User:
             return True
         return False
 
+    @staticmethod
+    def load_user_by_id(user_id):
+        with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+            with db_con.cursor(cursor_factory=RealDictCursor) as curs:
+                sql = """SELECT id, username, email, hashed_password FROM users WHERE id=%s"""
+                curs.execute(sql, (user_id, ))
+                data = curs.fetchone()
+                if data:
+                    loaded_user = User()
+                    loaded_user.__id = data.get('id')
+                    loaded_user.username = data.get('username')
+                    loaded_user.email = data.get('email')
+                    loaded_user._User__hashed_password = data.get('hashed_password')
+                    return loaded_user
+                else:
+                    return None
+
 
 if __name__ == '__main__':
+    import os
+    DB_NAME = "msgs_server"
+    DB_URI = os.environ.get('SERVER_DB_URI')  # postgresql://postgres@localhost
+    DB_COMPLETE_URI = "/".join([DB_URI, DB_NAME])
+
     x = User()
+    x.username = "Test username"
+    x.email = "Test email"
     x.hashed_password = "password1"
     print(x.check_password("password2", x.hashed_password))
     print(x.check_password("password1", x.hashed_password))
@@ -67,3 +94,7 @@ if __name__ == '__main__':
     print(x.check_password("password1", x.hashed_password))
     print(len(x.hashed_password))
     print(x.hashed_password)
+    # x.save_to_db()
+    y = x.load_user_by_id(14)
+    print(y)
+    print(y.check_password("password2", y.hashed_password))
