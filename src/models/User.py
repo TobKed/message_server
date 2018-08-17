@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import bcrypt
-# from . import DB_COMPLETE_URI
+from . import DB_COMPLETE_URI
 
 
 class User:
