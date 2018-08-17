@@ -96,6 +96,14 @@ class User:
                     rv.append(loaded_user)
         return rv
 
+    def delete(self):
+        with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+            with db_con.cursor(cursor_factory=RealDictCursor) as curs:
+                sql = """DELETE FROM Users WHERE id=%s"""
+                curs.execute(sql, (self.__id,))
+                self._User__id = -1
+                return True
+
 
 if __name__ == '__main__':
     import os
@@ -122,3 +130,6 @@ if __name__ == '__main__':
     y.username = "Test username changed"
     y.save_to_db()
     print(x.load_all_users())
+    y.delete()
+    print(x.load_all_users())
+    print(y.id)
