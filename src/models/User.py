@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import bcrypt
-from . import DB_COMPLETE_URI
+# from . import DB_COMPLETE_URI
 
 
 class User:
@@ -39,11 +39,8 @@ class User:
     def check_password(password, hashed):
         return bcrypt.checkpw(bytes(password, 'utf-8'), bytes(hashed, 'utf-8'))
 
-    def check_user_password(self, password):
-        return self.check_password(password, self.hashed_password) if self.hashed_password else True
-
-    def set_new_password(self, old_pass, new_pass, new_pass_confirm):
-        if self.check_user_password(old_pass) is not None and new_pass == new_pass_confirm:
+    def set_new_password(self, old_pass, old_pass_hashed, new_pass, new_pass_confirm):
+        if self.check_password(old_pass, old_pass_hashed) is not None and new_pass == new_pass_confirm:
             self.hashed_password = new_pass
         else:
             print("Wrong password or new password do not match")
@@ -63,10 +60,10 @@ class User:
 if __name__ == '__main__':
     x = User()
     x.hashed_password = "password1"
-    print(x.check_user_password("password2"))
-    print(x.check_user_password("password1"))
-    x.set_new_password("password1", "password2", "password2")
-    print(x.check_user_password("password2"))
-    print(x.check_user_password("password1"))
+    print(x.check_password("password2", x.hashed_password))
+    print(x.check_password("password1", x.hashed_password))
+    x.set_new_password("password1", x.hashed_password, "password2", "password2")
+    print(x.check_password("password2", x.hashed_password))
+    print(x.check_password("password1", x.hashed_password))
     print(len(x.hashed_password))
     print(x.hashed_password)
