@@ -49,15 +49,19 @@ class User:
             print("Wrong password or new password do not match")
 
     def save_to_db(self):
-        if self.__id == -1:
             with psycopg2.connect(DB_COMPLETE_URI) as db_con:
                 with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                    sql = """INSERT INTO Users(username, email, hashed_password) VALUES(%s, %s, %s) RETURNING id"""
-                    values = (self.username, self.email, self.hashed_password)
-                    curs.execute(sql, values)
-                    self.__id = curs.fetchone().get('id')
-            return True
-        return False
+                    if self.__id == -1:
+                        sql = """INSERT INTO Users(username, email, hashed_password) VALUES(%s, %s, %s) RETURNING id"""
+                        values = (self.username, self.email, self.hashed_password)
+                        curs.execute(sql, values)
+                        self.__id = curs.fetchone().get('id')
+                        return True
+                    else:
+                        sql = """UPDATE Users SET username=%s, email=%s, hashed_password=%s WHERE id=%s"""
+                        values = (self.username, self.email, self.hashed_password, self.id)
+                        curs.execute(sql, values)
+                        return True
 
     @staticmethod
     def load_user_by_id(user_id):
@@ -75,6 +79,22 @@ class User:
                     return loaded_user
                 else:
                     return None
+
+    @staticmethod
+    def load_all_users():
+        rv = []
+        with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+            with db_con.cursor(cursor_factory=RealDictCursor) as curs:
+                sql = """SELECT id, username, email, hashed_password FROM users"""
+                curs.execute(sql)
+                for row in curs.fetchall():
+                    loaded_user = User()
+                    loaded_user.__id = row.get('id')
+                    loaded_user.username = row.get('username')
+                    loaded_user.email = row.get('email')
+                    loaded_user._User__hashed_password = row.get('hashed_password')
+                    rv.append(loaded_user)
+        return rv
 
 
 if __name__ == '__main__':
@@ -98,3 +118,7 @@ if __name__ == '__main__':
     y = x.load_user_by_id(14)
     print(y)
     print(y.check_password("password2", y.hashed_password))
+    print(x.load_all_users())
+    y.username = "Test username changed"
+    y.save_to_db()
+    print(x.load_all_users())
