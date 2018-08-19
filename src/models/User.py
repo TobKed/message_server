@@ -81,6 +81,23 @@ class User:
                     return None
 
     @staticmethod
+    def load_user_by_name(username):
+        with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+            with db_con.cursor(cursor_factory=RealDictCursor) as curs:
+                sql = """SELECT id, username, email, hashed_password FROM users WHERE username=%s"""
+                curs.execute(sql, (username, ))
+                data = curs.fetchone()
+                if data:
+                    loaded_user = User()
+                    loaded_user.__id = data.get('id')
+                    loaded_user.username = data.get('username')
+                    loaded_user.email = data.get('email')
+                    loaded_user._User__hashed_password = data.get('hashed_password')
+                    return loaded_user
+                else:
+                    return None
+
+    @staticmethod
     def load_all_users():
         rv = []
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
