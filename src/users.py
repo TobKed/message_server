@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import argparse
 from models.User import User
 
@@ -14,24 +15,30 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def is_user_and_password_given(args):
-    return True if args.u and args.p else False
-
-
 def parse_user_and_password(args):
-    if is_user_and_password_given(args):
-        #TODO
-        pass
+    if args.username and args.password:
+        user = User.load_user_by_name(args.username)
+        if user:
+            if User.check_password(args.password, user.hashed_password):
+                #TODO
+                pass
+            else:
+                print("Wrong password!")
+        else:
+            print(f"No user '{args.username}' in the database.")
     else:
-        print("-u (--user) and -p (--password) must be given together")
+        print("-u (--user) and -p (--password) must be given together.")
+
 
 def list_parse(args):
     if args.list:
         print("Users list:")
         for user in User.load_all_users():
             print(f"\t{user}")
+        sys.exit()
 
 
 if __name__ == '__main__':
     args = parse_arguments()
     list_parse(args)
+    parse_user_and_password(args)
