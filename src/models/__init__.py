@@ -27,8 +27,8 @@ def create_users_table(db_complete_uri=DB_COMPLETE_URI):
     with psycopg2.connect(DB_COMPLETE_URI) as db_con:
         sql = """CREATE TABLE Users(
             id SERIAL,
-            email VARCHAR(255) NOT NULL UNIQUE,
             username VARCHAR(255) NOT NULL UNIQUE,
+            email VARCHAR(255),
             hashed_password VARCHAR(80) NOT NULL,
             PRIMARY	KEY(id)
         )"""

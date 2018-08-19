@@ -20,14 +20,19 @@ def parse_user_and_password(args):
         user = User.load_user_by_name(args.username)
         if user:
             if User.check_password(args.password, user.hashed_password):
-                #TODO
-                pass
+                return True
             else:
                 print("Wrong password!")
         else:
             print(f"No user '{args.username}' in the database.")
+            create_user(args.username)
     else:
         print("-u (--user) and -p (--password) must be given together.")
+
+
+def create_user(username):
+    #TODO
+    pass
 
 
 def list_parse(args):
