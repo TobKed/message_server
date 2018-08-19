@@ -18,6 +18,13 @@ def is_user_and_password_given(args):
     return True if args.u and args.p else False
 
 
+def parse_user_and_password(args):
+    if is_user_and_password_given(args):
+        #TODO
+        pass
+    else:
+        print("-u (--user) and -p (--password) must be given together")
+
 def list_parse(args):
     if args.list:
         print("Users list:")
