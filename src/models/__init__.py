@@ -42,7 +42,7 @@ def create_messeges_table(db_complete_uri=DB_COMPLETE_URI):
             id SERIAL,
             from_id INTEGER NOT NULL,
             to_id INTEGER NOT NULL,
-            msg_text TEXT,
+            msg_text VARCHAR(255),
             creation_date TIMESTAMP NOT NULL DEFAULT NOW(),
             PRIMARY	KEY(id),
             FOREIGN	KEY(from_id) REFERENCES Users(id) ON DELETE CASCADE,
@@ -54,8 +54,8 @@ def create_messeges_table(db_complete_uri=DB_COMPLETE_URI):
 
 if __name__ == '__main__':
     # nuke_db()
-    # create_db()
-    # create_users_table()
-    # create_messeges_table()
+    create_db()
+    create_users_table()
+    create_messeges_table()
 
     pass
