@@ -77,4 +77,10 @@ if __name__ == '__main__':
                 raise ValueError("-c (--confirm) argument with repeated edit argument has to be given "
                                  "then the new user login will be saved")
         elif args.new_pass:
-            pass
+            if args.confirm == args.new_pass:
+                user.set_new_password(old_pass=args.password, old_pass_hashed=user.hashed_password,
+                                      new_pass=args.new_pass, new_pass_confirm=args.confirm)
+            else:
+                raise ValueError("-c (--confirm) argument with repeated new_pass argument has to be given "
+                                 "then the new user password will be saved")
+
