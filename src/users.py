@@ -6,14 +6,17 @@ from models.User import User
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
+    exclusive_group = parser.add_mutually_exclusive_group()
     parser.add_argument('-u', '--username', help='user login')
     parser.add_argument('-p', '--password', help='user password')
-    parser.add_argument('-n', '--new-pass', help='new user password')
-    parser.add_argument('-c', '--confirm', help='confirm password for new created user or '
-                                                'confirm new password for user')
-    parser.add_argument('-l', '--list', action='store_true', help='list all users')
-    parser.add_argument('-d', '--delete', action='store_true', help='delete user by login')
-    parser.add_argument('-e', '--edit', action='store_true', help='edit user by login')
+    exclusive_group.add_argument('-l', '--list', action='store_true', help='list all users')
+    exclusive_group.add_argument('-d', '--delete', action='store_true', help='delete user')
+    exclusive_group.add_argument('-n', '--new-pass', help='new user password')
+    exclusive_group.add_argument('-e', '--edit', help='edit user login')
+    parser.add_argument('-c', '--confirm', help='confirm password for new created user \n'
+                                                'or confirm new password for existing user \n'
+                                                'or confirm new login \n'
+                                                'or confirm login for deleted user')
     return parser.parse_args()
 
 
@@ -25,20 +28,20 @@ def parse_user_and_password(args):
                 print(f"Correct passowrd for user '{user.username}'.")
                 return True
             else:
-                print("Wrong password!")
+                raise ValueError("Wrong password!")
         else:
             print(f"No user '{args.username}' in the database.")
             if create_user(args):
                 print(f"New user '{args.username}' created.")
     else:
-        print("-u (--user) and -p (--password) arguments must be given together.")
+        raise ValueError("-u (--user) and -p (--password) arguments must be given together.")
 
 
 def create_user(args):
     if not args.confirm:
-        print("-c (--confirm) parameter with repeated password (-p or -password argument) is required.")
+        raise ValueError("-c (--confirm) parameter with repeated password (-p or -password argument) is required.")
     elif not args.confirm == args.password or len(args.password) < 8:
-        print("confirm password do not match to password or password is shorter than eight characters.")
+        raise ValueError("confirm password do not match to password or password is shorter than eight characters.")
     else:
         new_user = User()
         new_user.username = args.username
@@ -58,4 +61,20 @@ if __name__ == '__main__':
     args = parse_arguments()
     list_parse(args)
     if parse_user_and_password(args):
-        pass
+        user = User.load_user_by_name(args.username)
+        if args.delete:
+            if args.confirm == args.username:
+                user.delete()
+                print(f"User '{args.username}' deleted.")
+            else:
+                raise ValueError("-c (--confirm) argument with repeated user login has to be given "
+                                 "then tne user with this login will be deleted")
+        elif args.edit:
+            if args.confirm == args.edit:
+                user.username = args.edit
+                user.save_to_db()
+            else:
+                raise ValueError("-c (--confirm) argument with repeated edit argument has to be given "
+                                 "then the new user login will be saved")
+        elif args.new_pass:
+            pass
