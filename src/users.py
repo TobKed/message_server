@@ -80,7 +80,8 @@ if __name__ == '__main__':
             if args.confirm == args.new_pass:
                 user.set_new_password(old_pass=args.password, old_pass_hashed=user.hashed_password,
                                       new_pass=args.new_pass, new_pass_confirm=args.confirm)
+                user.save_to_db()
+                print(f"Password for user '{args.username}' changed.")
             else:
                 raise ValueError("-c (--confirm) argument with repeated new_pass argument has to be given "
                                  "then the new user password will be saved")
-
