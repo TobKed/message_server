@@ -2,7 +2,7 @@
 import sys
 import argparse
 from models.User import User
-from models.Messege import Messege
+from models.Message import Message
 
 
 def parse_arguments():
@@ -11,8 +11,8 @@ def parse_arguments():
     parser.add_argument('-u', '--username', help='user login')
     parser.add_argument('-p', '--password', help='user password')
     exclusive_group.add_argument('-l', '--list', action='store_true', help='list all users')
-    exclusive_group.add_argument('-s', '--send', help='send messege')
-    exclusive_group.add_argument('-t', '--to', help='recipient login')
+    exclusive_group.add_argument('-s', '--send', help='send message')
+    parser.add_argument('-t', '--to', help='recipient login')
     return parser.parse_args()
 
 

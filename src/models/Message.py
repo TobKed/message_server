@@ -3,7 +3,7 @@ from psycopg2.extras import RealDictCursor
 from . import DB_COMPLETE_URI
 
 
-class Messege:
+class Message:
     __id = None
     from_id = None
     to_id = None
@@ -18,7 +18,7 @@ class Messege:
         self.creation_date = None
 
     def __repr__(self):
-        return f"Messege() # id={self.id}, from_id={self.from_id}, to_id={self.to_id}," \
+        return f"Message() # id={self.id}, from_id={self.from_id}, to_id={self.to_id}," \
                f" msg_text='{self.msg_text}', creation_date={self.creation_date}"
 
     @property
@@ -29,27 +29,27 @@ class Messege:
             with psycopg2.connect(DB_COMPLETE_URI) as db_con:
                 with db_con.cursor(cursor_factory=RealDictCursor) as curs:
                     if self.__id == -1:
-                        sql = """INSERT INTO Messeges(from_id, to_id, msg_text) VALUES(%s, %s, %s) RETURNING id"""
+                        sql = """INSERT INTO Messages(from_id, to_id, msg_text) VALUES(%s, %s, %s) RETURNING id"""
                         values = (self.from_id, self.to_id, self.msg_text)
                         curs.execute(sql, values)
                         self.__id = curs.fetchone().get('id')
                         return True
                     else:
-                        sql = """UPDATE Messeges SET from_id=%s, to_id=%s, msg_text=%s WHERE id=%s"""
+                        sql = """UPDATE Messages SET from_id=%s, to_id=%s, msg_text=%s WHERE id=%s"""
                         values = (self.from_id, self.to_id, self.msg_text, self.id)
                         curs.execute(sql, values)
                         return True
 
     @staticmethod
-    def load_messege_by_id(user_id):
+    def load_message_by_id(user_id):
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
             with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messeges WHERE id=%s"""
+                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages WHERE id=%s"""
                 curs.execute(sql, (user_id, ))
                 data = curs.fetchone()
                 if data:
-                    loaded_message = Messege()
-                    loaded_message._Messege__id = data.get('id')
+                    loaded_message = Message()
+                    loaded_message._Message__id = data.get('id')
                     loaded_message.from_id = data.get('from_id')
                     loaded_message.to_id = data.get('to_id')
                     loaded_message.msg_text = data.get('msg_text')
@@ -59,15 +59,15 @@ class Messege:
                     return None
 
     @staticmethod
-    def load_all_messeges():
+    def load_all_messages():
         rv = []
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
             with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messeges"""
+                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages"""
                 curs.execute(sql)
                 for row in curs.fetchall():
-                    loaded_message = Messege()
-                    loaded_message._Messege__id = row.get('id')
+                    loaded_message = Message()
+                    loaded_message._Message__id = row.get('id')
                     loaded_message.from_id = row.get('from_id')
                     loaded_message.to_id = row.get('to_id')
                     loaded_message.msg_text = row.get('msg_text')
@@ -76,15 +76,15 @@ class Messege:
         return rv
 
     @staticmethod
-    def load_all_messeges_for_user(user_id):
+    def load_all_messages_for_user(user_id):
         rv = []
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
             with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messeges WHERE id=%s"""
+                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages WHERE id=%s"""
                 curs.execute(sql, (user_id, ))
                 for row in curs.fetchall():
-                    loaded_message = Messege()
-                    loaded_message._Messege__id = row.get('id')
+                    loaded_message = Message()
+                    loaded_message._Message__id = row.get('id')
                     loaded_message.from_id = row.get('from_id')
                     loaded_message.to_id = row.get('to_id')
                     loaded_message.msg_text = row.get('msg_text')
@@ -95,7 +95,7 @@ class Messege:
     def delete(self):
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
             with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                sql = """DELETE FROM Messege WHERE id=%s"""
+                sql = """DELETE FROM Message WHERE id=%s"""
                 curs.execute(sql, (self.__id,))
-                self._Messege__id = -1
+                self._Message__id = -1
                 return True

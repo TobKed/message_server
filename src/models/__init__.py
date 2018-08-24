@@ -36,9 +36,9 @@ def create_users_table(db_complete_uri=DB_COMPLETE_URI):
             curs.execute(sql)
 
 
-def create_messeges_table(db_complete_uri=DB_COMPLETE_URI):
+def create_messages_table(db_complete_uri=DB_COMPLETE_URI):
     with psycopg2.connect(DB_COMPLETE_URI) as db_con:
-        sql = """CREATE TABLE Messeges(
+        sql = """CREATE TABLE Messages(
             id SERIAL,
             from_id INTEGER NOT NULL,
             to_id INTEGER NOT NULL,
@@ -53,9 +53,9 @@ def create_messeges_table(db_complete_uri=DB_COMPLETE_URI):
 
 
 if __name__ == '__main__':
-    # nuke_db()
+    nuke_db()
     create_db()
     create_users_table()
-    create_messeges_table()
+    create_messages_table()
 
     pass
