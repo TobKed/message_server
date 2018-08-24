@@ -57,5 +57,4 @@ if __name__ == '__main__':
     create_db()
     create_users_table()
     create_messages_table()
-
     pass
