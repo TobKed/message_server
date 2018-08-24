@@ -80,7 +80,24 @@ class Message:
         rv = []
         with psycopg2.connect(DB_COMPLETE_URI) as db_con:
             with db_con.cursor(cursor_factory=RealDictCursor) as curs:
-                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages WHERE id=%s"""
+                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages WHERE to_id=%s"""
+                curs.execute(sql, (user_id, ))
+                for row in curs.fetchall():
+                    loaded_message = Message()
+                    loaded_message._Message__id = row.get('id')
+                    loaded_message.from_id = row.get('from_id')
+                    loaded_message.to_id = row.get('to_id')
+                    loaded_message.msg_text = row.get('msg_text')
+                    loaded_message.creation_date = row.get('creation_date')
+                    rv.append(loaded_message)
+        return rv
+
+    @staticmethod
+    def load_all_messages_from_user(user_id):
+        rv = []
+        with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+            with db_con.cursor(cursor_factory=RealDictCursor) as curs:
+                sql = """SELECT id, from_id, to_id, msg_text, creation_date FROM Messages WHERE from_id=%s"""
                 curs.execute(sql, (user_id, ))
                 for row in curs.fetchall():
                     loaded_message = Message()
