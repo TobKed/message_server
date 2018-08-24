@@ -26,7 +26,7 @@ def parse_user_and_password(args):
         if user:
             if User.check_password(args.password, user.hashed_password):
                 print(f"Correct passowrd for user '{user.username}'.")
-                return True
+                return user
             else:
                 raise ValueError("Wrong password!")
         else:
@@ -60,8 +60,8 @@ def list_parse(args):
 if __name__ == '__main__':
     args = parse_arguments()
     list_parse(args)
-    if parse_user_and_password(args):
-        user = User.load_user_by_name(args.username)
+    user = parse_user_and_password(args)
+    if user:
         if args.delete:
             if args.confirm == args.username:
                 user.delete()

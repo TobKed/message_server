@@ -22,16 +22,34 @@ def parse_user_and_password(args):
         if user:
             if User.check_password(args.password, user.hashed_password):
                 print(f"Correct passowrd for user '{user.username}'.")
-                return True
+                return user
             else:
                 raise ValueError("Wrong password!")
         else:
-            print(f"No user '{args.username}' in the database.")
-            if create_user(args):
-                print(f"New user '{args.username}' created.")
-    else:
+            raise ValueError("No such user in database!")
+    elif bool(args.username) and not bool(args.password):
         raise ValueError("-u (--user) and -p (--password) arguments must be given together.")
+
+
+def list_parse(args, user=None):
+    if args.list and user:
+        print(f" Messages list sent to user '{user.username}':")
+        for message in Message.load_all_messages_for_user(user.id):
+            print(f"\t{message}")
+        print(f" Messages list sent from user '{user.username}':")
+        for message in Message.load_all_messages_from_user(user.id):
+            print(f"\t{message}")
+        sys.exit()
+    elif args.list and not user:
+        print("All messages list")
+        for message in Message.load_all_messages():
+            print(f"\t{message}")
+        sys.exit()
 
 
 if __name__ == '__main__':
     args = parse_arguments()
+    user = parse_user_and_password(args)
+    list_parse(args, user)
+    if user:
+        pass
