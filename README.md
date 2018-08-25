@@ -1,9 +1,7 @@
 # messages server
 > CLI apps to managae users and send messages between them
 
-## Usage examples
-
-#### Users
+### Users
 
 List of all arguments
 ```
@@ -19,32 +17,28 @@ List of all arguments
                          or confirm login for deleted user
 ```
 
-List of all users
-```
-python3 users.py -l
-puthon3 users.py --list
-```
+#### Usage examples
 
-List of all users
-```
-puthon3 users.py --list
-python3 users.py -l
-```
+* List of all users
+    ```             
+    python3 users.py --list
+    python3 users.py -l
+    ```
 
-Edit user login
-```
-python3 users.py --username LOGIN --password PASSWORD --edit NEW_LOGIN --confirm NEW_LOGIN
-python3 users.py -u LOGIN -p PASSWORD -e NEW_LOGIN -c NEW_LOGIN
-```
+* Edit user login
+    ```
+    python3 users.py --username LOGIN --password PASSWORD --edit NEW_LOGIN --confirm NEW_LOGIN
+    python3 users.py -u LOGIN -p PASSWORD -e NEW_LOGIN -c NEW_LOGIN
+    ```
 
-New user password
-```
-python3 users.py --username LOGIN --password PASSWORD --new-pass NEW_PASSWORD --confirm NEW_PASSWORD
-python3 users.py -u LOGIN -p PASSWORD -n NEW_PASSWORD -c NEW_PASSWORD
-```
+* New user password
+    ```
+    python3 users.py --username LOGIN --password PASSWORD --new-pass NEW_PASSWORD --confirm NEW_PASSWORD
+    python3 users.py -u LOGIN -p PASSWORD -n NEW_PASSWORD -c NEW_PASSWORD
+    ```
 
-Delete user
-```
-python3 users.py --username LOGIN --password PASSWORD --delete --confirm LOGIN
-python3 users.py -u LOGIN -p PASSWORD -d -c LOGIN
-```
+* Delete user
+    ```
+    python3 users.py --username LOGIN --password PASSWORD --delete --confirm LOGIN
+    python3 users.py -u LOGIN -p PASSWORD -d -c LOGIN
+    ```
