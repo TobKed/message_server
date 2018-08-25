@@ -14,7 +14,7 @@ List of all arguments
 '-c', '--confirm', help='confirm password for new created user
                          or confirm new password for existing user
                          or confirm new login
-                         or confirm login for deleted user
+                         or confirm login for deleted user'
 ```
 
 #### Usage examples
