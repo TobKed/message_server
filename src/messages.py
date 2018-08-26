@@ -10,8 +10,9 @@ def parse_arguments():
     exclusive_group = parser.add_mutually_exclusive_group()
     parser.add_argument('-u', '--username', help='user login')
     parser.add_argument('-p', '--password', help='user password')
-    exclusive_group.add_argument('-l', '--list', action='store_true', help='list all users')
-    exclusive_group.add_argument('-s', '--send', nargs="+", help='send message')
+    exclusive_group.add_argument('-l', '--list', action='store_true', help='list all messages \n'
+                                                                           ' or list of all mesages for given user')
+    exclusive_group.add_argument('-s', '--send', nargs="+", help='message text')
     parser.add_argument('-t', '--to', help='recipient login')
     return parser.parse_args()
 
@@ -49,11 +50,13 @@ def list_parse(args, user=None):
 
 def send_message(user_from, user_to_username, msg_text):
     user_to = User.load_user_by_name(user_to_username)
-    message = Message()
-    message.from_id = user_from.id
-    message.to_id = user_to.id
-    message.msg_text = msg_text
-    return message.save_to_db()
+    if user_to:
+        message = Message()
+        message.from_id = user_from.id
+        message.to_id = user_to.id
+        message.msg_text = msg_text
+        return message.save_to_db()
+    raise ValueError(f"No user '{user_to_username}' in the database.")
 
 
 if __name__ == '__main__':
