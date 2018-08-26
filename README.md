@@ -63,13 +63,13 @@ List of all arguments
 ### Messages                                                                
                                                                          
 List of all arguments                                                    
-```                                                                      
-'-u', '--username', help='user login'                                    
-'-p', '--password', help='user password'                                 
+```
+'-u', '--username', help='user login'
+'-p', '--password', help='user password'
 '-l', '--list', help='list all messages or list of all mesages for given user'
-'-s', '--send', nargs="+", help='message text'                                                                      
+'-s', '--send', nargs="+", help='message text'
 '-t', '--to', help='recipient login'
-```                                                               
+```
 
 #### Usage examples                                                      
                                                                          
