@@ -24,7 +24,7 @@ def nuke_db(db_name=DB_NAME, db_uri=DB_URI):
 
 
 def create_users_table(db_complete_uri=DB_COMPLETE_URI):
-    with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+    with psycopg2.connect(db_complete_uri) as db_con:
         sql = """CREATE TABLE Users(
             id SERIAL,
             username VARCHAR(255) NOT NULL UNIQUE,
@@ -37,7 +37,7 @@ def create_users_table(db_complete_uri=DB_COMPLETE_URI):
 
 
 def create_messages_table(db_complete_uri=DB_COMPLETE_URI):
-    with psycopg2.connect(DB_COMPLETE_URI) as db_con:
+    with psycopg2.connect(db_complete_uri) as db_con:
         sql = """CREATE TABLE Messages(
             id SERIAL,
             from_id INTEGER NOT NULL,
