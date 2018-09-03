@@ -1,5 +1,5 @@
 # messages server
-> CLI apps to managae users and send messages between them
+> CLI apps to manage users and send messages between them
 
 ## Requirements
 
