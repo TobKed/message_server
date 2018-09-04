@@ -43,7 +43,7 @@ class User:
         return bcrypt.checkpw(bytes(password, 'utf-8'), bytes(hashed, 'utf-8'))
 
     def set_new_password(self, old_pass, old_pass_hashed, new_pass, new_pass_confirm):
-        if self.check_password(old_pass, old_pass_hashed) is not None and new_pass == new_pass_confirm:
+        if self.check_password(old_pass, old_pass_hashed) and new_pass == new_pass_confirm:
             self.hashed_password = new_pass
             return True
         else:
